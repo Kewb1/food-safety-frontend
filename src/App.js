@@ -64,29 +64,40 @@ const FoodSafetyDashboard = () => {
 const API_BASE = process.env.REACT_APP_API_URL || 'https://food-safety.up.railway.app/api';
 
   const fetchRecalls = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`${API_BASE}/recalls?search=${searchTerm}`);
-      if (!response.ok) throw new Error('Failed to fetch recalls');
-      const data = await response.json();
-      setRecalls(data);
-    } catch (error) {
-      console.error('Error fetching recalls:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    const response = await fetch(`${API_BASE}/recalls?search=${searchTerm}`);
+    if (!response.ok) throw new Error('Failed to fetch recalls');
+    const result = await response.json();
+    
+    // Transform the API response to match what your frontend expects
+    const transformedData = {
+      fda_recalls: result.data.filter(recall => recall.source === 'FDA'),
+      cpsc_recalls: result.data.filter(recall => recall.source === 'CPSC'),
+      total_count: result.count
+    };
+    
+    setRecalls(transformedData);
+  } catch (error) {
+    console.error('Error fetching recalls:', error);
+    // Set empty data to prevent undefined errors
+    setRecalls({ fda_recalls: [], cpsc_recalls: [], total_count: 0 });
+  } finally {
+    setLoading(false);
+  }
+};
 
   const fetchStats = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/stats`);
-      if (!response.ok) throw new Error('Failed to fetch stats');
-      const data = await response.json();
-      setStats(data);
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-    }
-  };
+  try {
+    const response = await fetch(`${API_BASE}/stats`);
+    if (!response.ok) throw new Error('Failed to fetch stats');
+    const result = await response.json();
+    setStats(result.data); // Extract the data property
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    setStats({ total_recalls: 0, fda_recalls: 0, cpsc_recalls: 0, classifications: {} });
+  }
+};
 
   useEffect(() => {
     const loadInitialData = async () => {
