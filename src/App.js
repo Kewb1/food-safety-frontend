@@ -61,7 +61,7 @@ const FoodSafetyDashboard = () => {
   const [selectedAgency, setSelectedAgency] = useState('all');
 
   // API base URL
-const API_BASE = process.env.REACT_APP_API_URL || 'https://food-safety.up.railway.app/api';
+  const API_BASE = process.env.REACT_APP_API_URL || 'https://food-safety.up.railway.app/api';
 
   const fetchRecalls = async () => {
   try {
@@ -98,6 +98,12 @@ const API_BASE = process.env.REACT_APP_API_URL || 'https://food-safety.up.railwa
     setStats({ total_recalls: 0, fda_recalls: 0, cpsc_recalls: 0, classifications: {} });
   }
 };
+ useEffect(() => {
+    // Change title when component mounts
+
+    
+    document.title = "Food Safety Dashboard";
+  }, []);
 
   useEffect(() => {
     const loadInitialData = async () => {
