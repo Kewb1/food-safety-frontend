@@ -93,6 +93,8 @@ const FoodSafetyDashboard = () => {
     if (!response.ok) throw new Error('Failed to fetch stats');
     const result = await response.json();
     setStats(result.data); // Extract the data property
+     console.log('Stats API response:', result.data);
+    
   } catch (error) {
     console.error('Error fetching stats:', error);
     setStats({ total_recalls: 0, fda_recalls: 0, cpsc_recalls: 0, classifications: {} });
@@ -150,15 +152,20 @@ const FoodSafetyDashboard = () => {
     return new Date(dateString).toLocaleDateString();
   };
 
+
+   var FDAlength;
+    var CPSClength;
   const filteredRecalls = () => {
     let allRecalls = [];
+    FDAlength = recalls.fda_recalls.length;
+    CPSClength = recalls.cpsc_recalls.length;
     
     if (selectedAgency === 'all' || selectedAgency === 'fda') {
       allRecalls = [...allRecalls, ...recalls.fda_recalls.map(r => ({ ...r, agency: 'FDA' }))];
     }
     
     if (selectedAgency === 'all' || selectedAgency === 'cpsc') {
-      allRecalls = [...allRecalls, ...recalls.cpsc_recalls.map(r => ({ ...r, agency: 'USDA' }))];
+      allRecalls = [...allRecalls, ...recalls.cpsc_recalls.map(r => ({ ...r, agency: 'CSPC' }))];
     }
     
     return allRecalls.sort((a, b) => {
@@ -212,7 +219,7 @@ const FoodSafetyDashboard = () => {
                     Total Recalls
                   </Typography>
                   <Typography variant="h4" component="div" color="primary">
-                    {stats.total_recalls}
+                    {filteredRecalls().length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                     📈 All agencies combined
@@ -228,7 +235,7 @@ const FoodSafetyDashboard = () => {
                     FDA Recalls
                   </Typography>
                   <Typography variant="h4" component="div" color="primary">
-                    {stats.fda_recalls}
+                    {FDAlength}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                     🏢 Food & Drug Administration
@@ -244,7 +251,7 @@ const FoodSafetyDashboard = () => {
                     CPSC Recalls
                   </Typography>
                   <Typography variant="h4" component="div" color="success.main">
-                    {stats.cpsc_recalls}
+                    { CPSClength }
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                     🛡️ Consumer Product Safety
@@ -358,7 +365,7 @@ const FoodSafetyDashboard = () => {
                           />
                         )}
                         <Chip
-                          label={`📅 ${formatDate(recall.report_date || recall.recall_date)}`}
+                          label={`📅 ${formatDate(recall.date || recall.date)}`}
                           variant="outlined"
                           size="small"
                         />
