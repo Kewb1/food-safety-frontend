@@ -101,7 +101,7 @@ const FoodSafetyDashboard = () => {
  useEffect(() => {
     // Change title when component mounts
 
-    
+
     document.title = "Food Safety Dashboard";
   }, []);
 
@@ -174,8 +174,13 @@ const FoodSafetyDashboard = () => {
         {/* Header */}
         <AppBar position="static" elevation={2}>
           <Toolbar>
+            <img
+              src="/logo.png"
+              alt="Food Safety Monitor Logo"
+              style={{ width: 50, height: 50, marginRight: 16, borderRadius: '50%' }}
+            />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              ⚠️ Food Safety Monitor
+              Food Safety Monitor
             </Typography>
             <Button
               color="inherit"
