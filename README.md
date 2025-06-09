@@ -4,8 +4,7 @@ A React-based frontend application for monitoring food and product recalls, prov
 
 # Features
 
-Real-time recall notifications and updates
-
+Real-time recall notifications and updates  
 Comprehensive recall database with search and filtering
 
 User-friendly interface for browsing recall information
